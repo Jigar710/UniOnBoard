@@ -10,7 +10,7 @@ const crypto = require("crypto");
 
 
 //========== Student, Faculty, Admin routes ==========//
-exports.signup = BigPromise(async (req, res, next) => {
+exports.home = BigPromise(async (req, res, next) => {
     res.send("<h1>UniOnBoard Home</h1>")
 })
 
