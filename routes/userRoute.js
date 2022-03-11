@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { signup,
+const { home,signup,
     login,
     logout,
     getLoggedInUserDetails,
@@ -18,6 +18,7 @@ const { isLoggedIn, customRole } = require("../middleware/userMiddleware");
 
 
 //========== Student, faculty, Admin routes ==========//
+router.route("/").post(home);
 router.route("/signup").post(signup);
 router.route("/login").post(login);
 router.route("/logout").get(logout);
