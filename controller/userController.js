@@ -48,13 +48,15 @@ exports.signup = BigPromise(async (req, res, next) => {
             message: 'Please provide role only from - student or faculty.'
         });
     }
+    const k = "kalp"
 
     // Create and save User in DB.
     const user = await User.create({
         name,
         email,
         password,
-        role
+        role,
+        k
     });
 
 
