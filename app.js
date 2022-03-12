@@ -39,7 +39,8 @@ app.enable('trust proxy');
 app.use(cors({
   origin: 'http://localhost:3000',
   methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
-  credentials: true
+  credentials: true,
+  proxy: true
 }));
 
 app.use('/', userRoute);
