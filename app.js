@@ -34,11 +34,18 @@ app.use(fileUpload({
   tempFileDir: '/tmp/'
 }))
 
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
-  credentials: true
-}));
+const whitelist = ['http://localhost:3000', 'https://be-unionboard.herokuapp.com'];
+const corsOptions = {
+  credentials: true, // This is important.
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin))
+      return callback(null, true)
+
+    callback(new Error('Not allowed by CORS'));
+  }
+}
+
+app.use(cors(corsOptions));
 
 app.use('/', userRoute);
 app.use('/', blogRoute);
