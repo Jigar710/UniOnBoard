@@ -33,7 +33,12 @@ app.use(fileUpload({
   useTempFiles: true,
   tempFileDir: '/tmp/'
 }))
-app.use(cors());
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+  credentials: true
+}));
 
 app.use('/', userRoute);
 app.use('/', blogRoute);
@@ -43,7 +48,7 @@ app.use('/', instituteRoute);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 

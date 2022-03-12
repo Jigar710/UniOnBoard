@@ -47,11 +47,12 @@ exports.getParticularInstitute = BigPromise(async (req, res, next) => {
     }
 
     console.log(await institute.branches['AUTOMOBILE ENGINEERING']);
-    console.log(await Object.keys(institute.branches));
+    const branchList = await Object.keys(institute.branches);
 
     res.status(200).json({
         success: true,
         institute,
+        branchList
     });
 });
 
