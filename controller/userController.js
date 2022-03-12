@@ -7,6 +7,7 @@ const cloudinary = require("cloudinary").v2;
 const { signValidation, loginValidation } = require("../models/validation");
 const mailHelper = require("../utils/emailHelper");
 const crypto = require("crypto");
+const { cookie } = require("request");
 
 
 //========== Student, Faculty, Admin routes ==========//
@@ -69,6 +70,8 @@ exports.signup = BigPromise(async (req, res, next) => {
         });
     }
 
+
+
     // At a time of signup we either send token or send success message.
     //---> If we want that after successfully registerd, user should directly access procected routes then use token.
     //------> handle cookies
@@ -116,6 +119,7 @@ exports.login = BigPromise(async (req, res, next) => {
             message: 'Password does not matched.'
         });
     }
+
 
     // If all thing is good then send token.
     cookieToken(user, res);
