@@ -34,13 +34,10 @@ app.use(fileUpload({
   tempFileDir: '/tmp/'
 }))
 
-app.enable('trust proxy');
-
 app.use(cors({
   origin: 'http://localhost:3000',
   methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
-  credentials: true,
-  proxy: true
+  credentials: true
 }));
 
 app.use('/', userRoute);

@@ -14,7 +14,7 @@ exports.isLoggedIn = BigPromise(async (req, res, next) => {
     }
 
     // store that token.
-    const token = req.cookies.token || req.header("Authorization").replace("Bearer ", "");
+    const token = req.cookies.token;
 
     // this verify method uses JWT_SECRET and decode provided token(containing user id - injected by us in model).
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
