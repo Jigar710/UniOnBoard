@@ -126,7 +126,7 @@ userSchema.methods.isvalidatedPassword = async function (userSendPassword) {
 userSchema.methods.getJwtToken = function () {
 
     // we are just injecting user id in token... we can also inject email and all.
-    // we can get back this injected in token to find user.
+    // we can get back this injected id in token to find user.
     return jwt.sign({ id: this._id },
         process.env.JWT_SECRET,
         {

@@ -61,28 +61,25 @@ exports.signup = BigPromise(async (req, res, next) => {
         role
     });
 
-
     // Check if User is created or not.
     if (!user) {
-        return res.status(400).json({
+        return res.status(500).json({
             success: false,
-            message: 'User creation failed.'
+            message: 'User registration failed.'
         });
     }
-
-
 
     // At a time of signup we either send token or send success message.
     //---> If we want that after successfully registerd, user should directly access procected routes then use token.
     //------> handle cookies
-    cookieToken(user, res);
+    // cookieToken(user, res);
 
     //---> If we want that after successfully registerd, user should login to access procected routes then use simple success message.
     //------> sending success message
-    // res.status(400).json({
-    //     success: true,
-    //     message: "You are successfully registered. Go and login."
-    // });
+    res.status(201).json({
+        success: true,
+        message: "You are successfully registered. Go and login."
+    });
 });
 
 exports.login = BigPromise(async (req, res, next) => {
@@ -106,7 +103,7 @@ exports.login = BigPromise(async (req, res, next) => {
     if (!user) {
         return res.status(400).json({
             success: false,
-            message: 'User with given email does not exist.'
+            message: 'Invalid Credientials.'
         });
     }
 
@@ -116,10 +113,9 @@ exports.login = BigPromise(async (req, res, next) => {
     if (!isPasswordCorrect) {
         return res.status(400).json({
             success: false,
-            message: 'Password does not matched.'
+            message: 'Invalid Credientials.'
         });
     }
-
 
     // If all thing is good then send token.
     cookieToken(user, res);
@@ -134,11 +130,16 @@ exports.logout = BigPromise(async (req, res, next) => {
         httpOnly: true
     });
 
+    // res.clearCookie('token');
+
     // Send success message for Logout.
     res.status(200).json({
         success: true,
         message: "Logout sucessfully."
     });
+
+    res.end();
+
 });
 
 exports.getLoggedInUserDetails = BigPromise(async (req, res, next) => {
