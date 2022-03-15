@@ -76,7 +76,7 @@ exports.signup = BigPromise(async (req, res, next) => {
 
     //---> If we want that after successfully registerd, user should login to access procected routes then use simple success message.
     //------> sending success message
-    res.status(201).json({
+    res.status(200).json({
         success: true,
         message: "You are successfully registered. Go and login."
     });
@@ -127,18 +127,14 @@ exports.logout = BigPromise(async (req, res, next) => {
     // Reset expire time of cookie to current time.
     res.cookie('token', null, {
         expires: new Date(Date.now()),
-        httpOnly: true
+        // httpOnly: true
     });
-
-    // res.clearCookie('token');
 
     // Send success message for Logout.
     res.status(200).json({
         success: true,
         message: "Logout sucessfully."
     });
-
-    res.end();
 
 });
 
