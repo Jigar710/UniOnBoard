@@ -20,11 +20,10 @@ exports.signup = BigPromise(async (req, res, next) => {
     // Check for mandatory a data.
     const { error } = signValidation(req.body);
     if (error) {
-        res.status(400).json({
+        return res.status(400).json({
             success: false,
             message: error.details[0].message
         });
-        return;
     }
     // Check if both password fields matched or not.
     if (password !== conf_password) {
