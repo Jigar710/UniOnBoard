@@ -20,10 +20,11 @@ exports.signup = BigPromise(async (req, res, next) => {
     // Check for mandatory a data.
     const { error } = signValidation(req.body);
     if (error) {
-        return res.status(400).json({
+        res.status(400).json({
             success: false,
             message: error.details[0].message
         });
+        return;
     }
     // Check if both password fields matched or not.
     if (password !== conf_password) {
@@ -124,18 +125,14 @@ exports.logout = BigPromise(async (req, res, next) => {
     // Reset expire time of cookie to current time.
     res.cookie('token', null, {
         expires: new Date(Date.now()),
-        httpOnly: true
+        // httpOnly: true
     });
-
-    // res.clearCookie('token');
 
     // Send success message for Logout.
     res.status(200).json({
         success: true,
         message: "Logout sucessfully."
     });
-
-    res.end();
 
 });
 
