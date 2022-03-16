@@ -18,6 +18,35 @@ exports.getAllBlogs = BigPromise(async (req, res, next) => {
 
 });
 
+exports.getOneBlog = BigPromise(async (req, res, next) => {
+
+    // Collect data from Params.
+    const { id } = req.params;
+
+    // Check for mandatory a data.
+    if (!id) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide user id.'
+        });
+    }
+
+    // Check if User exist or not in DB base on id.
+    const blog = await Blog.findById(id);
+    if (!blog) {
+        return res.status(400).json({
+            success: false,
+            message: 'No blog found with given ID.'
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        blog,
+    })
+
+});
+
 exports.getParticularFacultyBlogs = BigPromise(async (req, res, next) => {
 
     // Collect data from Params.
@@ -160,7 +189,13 @@ exports.deleteReview = BigPromise(async (req, res, next) => {
     const numberOfReviews = reviews.length
 
     // adjust average ratings.
-    const ratings = blog.reviews.reduce((acc, item) => item.rating + acc, 0) / blog.reviews.length
+    const ratings = reviews.reduce((acc, item) => item.rating + acc, 0) / reviews.length
+
+    // if only one review is there and we are deleting user of that review then new_ratings will be set to NaN.
+    // so set that new_ratings to zero in place of NaN.
+    if (isNaN(ratings)) {
+        ratings = 0;
+    }
 
     // update and save the blog.
     await Blog.findByIdAndUpdate(blogId, {
