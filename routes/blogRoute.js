@@ -6,6 +6,7 @@ const { addBlog,
     deleteBlog,
     getFacultyPersonalBlogs,
     getAllBlogs,
+    getOneBlog,
     getParticularFacultyBlogs,
     addReview,
     deleteReview,
@@ -17,6 +18,7 @@ const { isLoggedIn, customRole } = require("../middleware/userMiddleware");
 
 //========== Student, Faculty, Admin routes ==========//
 router.route("/getAllBlog").get(isLoggedIn, getAllBlogs);
+router.route("/getOneBlog/:id").get(isLoggedIn, getOneBlog);
 router.route("/getParticularFacultyBlogs/:id").get(isLoggedIn, getParticularFacultyBlogs);
 router.route("/review/:blogId")
     .put(isLoggedIn, addReview)
