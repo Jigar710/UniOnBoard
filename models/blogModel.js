@@ -62,9 +62,15 @@ const blogSchema = new mongoose.Schema({
     ],
 
     author: {
-        type: mongoose.Schema.ObjectId,
-        ref: "User",
-        required: true
+        authorID: {
+            type: mongoose.Schema.ObjectId,
+            ref: "User",
+            required: true
+        },
+        authorName: {
+            type: String,
+            required: true
+        },
     },
 
     // tag: {

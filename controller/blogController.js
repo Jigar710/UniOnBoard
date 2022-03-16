@@ -44,7 +44,6 @@ exports.getOneBlog = BigPromise(async (req, res, next) => {
         success: true,
         blog,
     })
-
 });
 
 exports.getParticularFacultyBlogs = BigPromise(async (req, res, next) => {
@@ -287,7 +286,11 @@ exports.addBlog = BigPromise(async (req, res, next) => {
     }
 
     // we need author id, that will come from req.user via IsLoggedIn middleware. 
-    req.body.author = req.user.id
+    // req.body.author = req.user.id
+    req.body.author = {
+        authorID: req.user.id,
+        authorName: req.user.name
+    }
 
     // create blog and save it in DB.
     const blog = await Blog.create(req.body)
