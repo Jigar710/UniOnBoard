@@ -7,7 +7,7 @@ const cloudinary = require("cloudinary").v2;
 const { signValidation, loginValidation } = require("../models/validation");
 const mailHelper = require("../utils/emailHelper");
 const crypto = require("crypto");
-const { cookie } = require("request");
+
 
 
 //========== Student, Faculty, Admin routes ==========//
@@ -214,6 +214,23 @@ exports.updateUserDetails = BigPromise(async (req, res, next) => {
 
         // Now grab new photo that user want to upload and upload that in cloudinary.
         let file = req.files.photo;
+
+        // Image size should be less than 1 MB.
+        if (file.size > 1024 * 1024) {
+            return res.status(400).json({
+                success: false,
+                message: "Size too large."
+            })
+        }
+
+        // Only jpeg or png file are allowed.
+        if (file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/png') {
+            return res.status(400).json({
+                success: false,
+                message: "File format is incorrect. Acceptable image format - jpeg, png "
+            })
+        }
+
         const result = await cloudinary.uploader.upload(file.tempFilePath, {
             folder: "users",
             width: 150,
