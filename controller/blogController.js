@@ -44,7 +44,6 @@ exports.getOneBlog = BigPromise(async (req, res, next) => {
         success: true,
         blog,
     })
-
 });
 
 exports.getParticularFacultyBlogs = BigPromise(async (req, res, next) => {
@@ -275,6 +274,23 @@ exports.addBlog = BigPromise(async (req, res, next) => {
     var result;
     if (req.files) {
         let file = req.files.photo;
+
+        // Image size should be less than 1 MB.
+        if (file.size > 1024 * 1024) {
+            return res.status(400).json({
+                success: false,
+                message: "Size too large."
+            })
+        }
+
+        // Only jpeg or png file are allowed.
+        if (file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/png') {
+            return res.status(400).json({
+                success: false,
+                message: "File format is incorrect. Acceptable image format - jpeg, png "
+            })
+        }
+
         result = await cloudinary.uploader.upload(file.tempFilePath, {
             folder: "blogs",
         });
@@ -287,7 +303,11 @@ exports.addBlog = BigPromise(async (req, res, next) => {
     }
 
     // we need author id, that will come from req.user via IsLoggedIn middleware. 
-    req.body.author = req.user.id
+    // req.body.author = req.user.id
+    req.body.author = {
+        authorID: req.user.id,
+        authorName: req.user.name
+    }
 
     // create blog and save it in DB.
     const blog = await Blog.create(req.body)
@@ -331,7 +351,7 @@ exports.editBlog = BigPromise(async (req, res, next) => {
 
     // Check if auther is valid or not
     // compare author id coming from DB with req.user._id coming from IsLoggedIn middleware.
-    if (String(req.user._id) !== String(blog.author)) {
+    if (String(req.user._id) !== String(blog.author.authorID)) {
         return res.status(400).json({
             success: false,
             message: "You are not the author of this blog."
@@ -340,14 +360,30 @@ exports.editBlog = BigPromise(async (req, res, next) => {
 
     // Handle image if it is coming.
     if (req.files) {
-        // Destroy existing image
-        // No need to check if image exists or not. Bcoz for blog image is required field.
+        // Destroy existing image.
         const res = await cloudinary.uploader.destroy(blog.photo.id);
 
         // upload new photo -----> It is front-end's responsiblity to be sure that only one Image in coming.
         var result;
         if (req.files) {
             let file = req.files.photo;
+
+            // Image size should be less than 1 MB.
+            if (file.size > 1024 * 1024) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Size too large."
+                })
+            }
+
+            // Only jpeg or png file are allowed.
+            if (file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/png') {
+                return res.status(400).json({
+                    success: false,
+                    message: "File format is incorrect. Acceptable image format - jpeg, png "
+                })
+            }
+
             result = await cloudinary.uploader.upload(file.tempFilePath, {
                 folder: "blogs",
             });
@@ -397,7 +433,7 @@ exports.deleteBlog = BigPromise(async (req, res, next) => {
 
     // Check if auther is valid or not.
     // compare author id coming from DB with req.user._id coming from IsLoggedIn middleware.
-    if (String(req.user._id) !== String(blog.author)) {
+    if (String(req.user._id) !== String(blog.author.authorID)) {
         return res.status(400).json({
             success: false,
             message: "You are not the author of this blog."
@@ -419,7 +455,7 @@ exports.deleteBlog = BigPromise(async (req, res, next) => {
 exports.getFacultyPersonalBlogs = BigPromise(async (req, res, next) => {
 
     // Find blogs where author is req.user._id coming from IsLoggedIn middleware.
-    const blogs = await Blog.find({ author: req.user._id });
+    const blogs = await Blog.find({"author.authorID": req.user._id});
 
     res.status(200).json({
         success: true,
