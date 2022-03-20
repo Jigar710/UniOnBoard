@@ -49,18 +49,6 @@ const userSchema = new mongoose.Schema({
         }
     },
 
-    gender: {
-        type: String,
-        enum: {
-            values: [
-                "male",
-                "female",
-                "other"
-            ],
-            message: "Please provide gender only from - male , female, other."
-        }
-    },
-
     DOB: {
         type: Date,
     },
@@ -144,7 +132,7 @@ userSchema.methods.getForgotPasswordToken = function () {
     this.forgotPasswordToken = crypto.createHash('sha256').update(forgotToken).digest('hex');
 
     // store expiry time for forgotPasswordToken in DB.
-    this.forgotPasswordExpiry = Date.now() + 20 * 60 * 100;
+    this.forgotPasswordExpiry = Date.now() + 20 * 60 * 1000;
 
     // returning simple string but storing hashed string in DB. So at time when we use this function be sure to handle this situation
     return forgotToken;
