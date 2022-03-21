@@ -69,7 +69,7 @@ exports.getParticularFacultyBlogs = BigPromise(async (req, res, next) => {
     }
 
     // Get Blog where author matches.
-    const blogs = await Blog.find({ author: id });
+    const blogs = await Blog.find({"author.authorID": id});
 
     res.status(200).json({
         success: true,

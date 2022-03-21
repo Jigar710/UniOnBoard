@@ -2,16 +2,16 @@ const express = require("express");
 const router = express.Router();
 
 const { signup,
+    activateEmail,
     login,
     logout,
     getLoggedInUserDetails,
     updateUserDetails,
     forgotPassword,
     resetPassword,
-    changePassword,
+    updatePassword,
     adminGetAllUser,
-    adminGetSingleUser,
-    adminUpdateSingleUserDetails,
+    adminUpdateRole,
     adminDeleteSingleUser } = require("../controller/userController");
 
 const { isLoggedIn, customRole } = require("../middleware/userMiddleware");
@@ -19,15 +19,16 @@ const { isLoggedIn, customRole } = require("../middleware/userMiddleware");
 
 //========== Student, faculty, Admin routes ==========//
 router.route("/signup").post(signup);
+router.route("/activateEmail/:token").post(activateEmail);
 router.route("/login").post(login);
 router.route("/logout").get(logout);
 
-router.route("/userdashboard").get(isLoggedIn, getLoggedInUserDetails);
-router.route("/userdashboard/update").put(isLoggedIn, updateUserDetails);
+router.route("/dashboard").get(isLoggedIn, getLoggedInUserDetails);
+router.route("/dashboard/update").put(isLoggedIn, updateUserDetails);
 
 router.route("/forgotPassword").post(forgotPassword);
-router.route("/password/reset/:token").post(resetPassword);
-router.route("/password/update").post(isLoggedIn, changePassword);
+router.route("/resetPassword/:token").post(resetPassword);
+router.route("/updatePassword").post(isLoggedIn, updatePassword);
 
 
 
@@ -36,8 +37,7 @@ router.route("/password/update").post(isLoggedIn, changePassword);
 //========== Admin only routes ==========//
 router.route("/admin/getAllUsers").get(isLoggedIn, customRole("admin"), adminGetAllUser);
 router.route("/admin/singleuser/:id")
-    .get(isLoggedIn, customRole("admin"), adminGetSingleUser)
-    .put(isLoggedIn, customRole("admin"), adminUpdateSingleUserDetails)
+    .put(isLoggedIn, customRole("admin"), adminUpdateRole)
     .delete(isLoggedIn, customRole("admin"), adminDeleteSingleUser);
 
 

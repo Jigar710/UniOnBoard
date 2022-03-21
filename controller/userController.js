@@ -7,6 +7,8 @@ const cloudinary = require("cloudinary").v2;
 const { signValidation, loginValidation } = require("../models/validation");
 const mailHelper = require("../utils/emailHelper");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken")
+const { CLIENT_URL } = process.env
 
 
 
@@ -50,33 +52,75 @@ exports.signup = BigPromise(async (req, res, next) => {
         });
     }
 
-    // Create and save User in DB.
-    const user = await User.create({
+    // Collect all information of user.
+    const newUser = {
         name,
         email,
         password,
         role
-    });
+    }
 
-    // Check if User is created or not.
-    if (!user) {
-        return res.status(500).json({
+    // Create token containing all information of user.
+    const activation_token = createActivationToken(newUser);
+
+    // Generate url --> http://localhost:4000/activateEmail/{activation_token}
+    const url = `${CLIENT_URL}/activateEmail/${activation_token}`
+
+    // Attempt to send mail.
+    try {
+        await mailHelper({
+            email: email,
+            subject: `UniOnBoard - Activate your account`,
+            url: url,
+            txt: "Validate Email"
+        });
+
+        // Json responce if mail is sent.
+        res.status(200).json({
+            success: true,
+            message: "Registered successfully, Please activate your email to start."
+        });
+
+    } catch (error) {
+        res.status(400).json({
             success: false,
-            message: 'User registration failed.'
+            message: error
         });
     }
 
-    // At a time of signup we either send token or send success message.
-    //---> If we want that after successfully registerd, user should directly access procected routes then use token.
-    //------> handle cookies
-    // cookieToken(user, res);
 
-    //---> If we want that after successfully registerd, user should login to access procected routes then use simple success message.
-    //------> sending success message
+});
+
+exports.activateEmail = BigPromise(async (req, res) => {
+
+    // Collect data from Params.
+    const { token } = req.params
+
+    // Check for mandatory a data.
+    if (!token) {
+        return res.status(400).json({
+            success: false,
+            message: 'Unauthorised Access'
+        });
+    }
+
+    // Decode user information stored in token
+    const userInfo = jwt.verify(token, process.env.ACTIVATION_TOKEN_SECRET)
+
+    // Collect all information of user.
+    const { name, email, password, role } = userInfo
+
+    // Create and save user in DB.
+    const user = new User({
+        name, email, password, role
+    })
+    await user.save()
+
     res.status(200).json({
         success: true,
-        message: "You are successfully registered. Go and login."
+        message: "Account has been activated. Please Login"
     });
+
 });
 
 exports.login = BigPromise(async (req, res, next) => {
@@ -184,16 +228,6 @@ exports.updateUserDetails = BigPromise(async (req, res, next) => {
         newData.name = req.body.name;
     }
 
-    // If user is sending gender to change then save that new gender in newData object.
-    if (req.body.gender) {
-        if (!(req.body.gender === 'male' || req.body.gender === 'female' || req.body.gender === 'other')) {
-            return res.status(400).json({
-                success: false,
-                message: 'Please provide gender only from - male or female or other.'
-            });
-        }
-        newData.gender = req.body.gender;
-    }
 
     // If user is sending DOB to change then save that new DOB in newData object.
     if (req.body.DOB) {
@@ -291,23 +325,21 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
 
     // Create URL ---> http://localhost:4000/password/reset/{token}
-    const myUrl = `${req.protocol}://${req.get("host")}/password/reset/${forgotToken}`;
-
-    // Craft msg
-    const message = `Copy Paste this link in your URL to reset Password.\n\n ${myUrl}`;
+    const url = `${req.protocol}://${req.get("host")}/resetPassword/${forgotToken}`;
 
     // Attempt to send mail.
     try {
         await mailHelper({
-            email: user.email,
+            email: email,
             subject: `UniOnBoard - Password Reset Email`,
-            message: message
+            url: url,
+            txt: "Reset password"
         });
 
         // Json responce if mail is sent.
-        res.status(400).json({
+        res.status(200).json({
             success: true,
-            message: "Email sent successfully. Check your mail"
+            message: "Password has been sent to your email."
         });
 
     } catch (error) {
@@ -330,7 +362,28 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
 exports.resetPassword = BigPromise(async (req, res, next) => {
 
     // Get token from params ---> http://localhost:4000/password/reset/{token}
-    const token = req.params.token;
+    const { password, conf_password } = req.body
+    const { token } = req.params;
+
+    // Check for mandatory a data.
+    if (!(password && conf_password)) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide Password and Confirm-Password'
+        });
+    }
+    if (password !== conf_password) {
+        return res.status(400).json({
+            success: false,
+            message: 'Password and Confirm-Password do not match.'
+        });
+    }
+    if (!token) {
+        return res.status(400).json({
+            success: false,
+            message: 'Unauthorised Access'
+        });
+    }
 
     // Encrypt user provided token bcoz we saved encrypted token in DB and to compare DB token and User provided token, we need to encrypt user provided token. 
     const encryToken = crypto.createHash('sha256').update(token).digest('hex');
@@ -345,28 +398,12 @@ exports.resetPassword = BigPromise(async (req, res, next) => {
     if (!user) {
         return res.status(400).json({
             success: false,
-            message: 'Token is invalid or expired.'
+            message: 'Unauthorised Access'
         });
     }
 
-    // We reached till this means user exist in DB, Now its front-end issue that they have to compulsory provide 2 fields --> password, confirmPassword
-    // Check weather both fields are provided or not
-    if (!(req.body.password && req.body.confirmPassword)) {
-        return res.status(400).json({
-            success: false,
-            message: 'Password and Confirm-Password are required.'
-        });
-    }
-
-    // If provided fields do not match, thorw error msg.
-    if (req.body.password !== req.body.confirmPassword) {
-        return res.status(400).json({
-            success: false,
-            message: 'Password and Confirm-Password do not match.'
-        });
-    }
-
-    // If provided fields matches, update user password in DB. 
+    // We reached till this means user exist in DB.
+    // Update user password in DB. 
     user.password = req.body.password;
 
     // After successfully upadating password change forgotPasswordToken and forgotPasswordExpiry to undefined in DB.
@@ -376,12 +413,14 @@ exports.resetPassword = BigPromise(async (req, res, next) => {
     // Save changes in DB.
     await user.save();
 
-    // Send a json response or send a Token.
-    cookieToken(user, res);
+    res.status(200).json({
+        success: true,
+        message: "Password has been updated. Please login."
+    });
 });
 
 // this method will be helpful to reset password when user in logged in means user knows current password and want to change it.
-exports.changePassword = BigPromise(async (req, res, next) => {
+exports.updatePassword = BigPromise(async (req, res, next) => {
 
     // This method works when user is logged in.
     // So that we will have user id added via IsLoggedIn middleware.
@@ -439,45 +478,22 @@ exports.adminGetAllUser = BigPromise(async (req, res, next) => {
 
 });
 
-exports.adminGetSingleUser = BigPromise(async (req, res, next) => {
+exports.adminUpdateRole = BigPromise(async (req, res) => {
 
-    // Collect data from Params.
+    // Collect data.
     const { id } = req.params;
+    const { role } = req.body;
 
-    // Check for mandatory a data.
     if (!id) {
         return res.status(400).json({
             success: false,
             message: 'Please provide user id.'
         });
     }
-
-    // Check if User exist or not in DB base on id.
-    const user = await User.findById(id);
-    if (!user) {
+    if (!role) {
         return res.status(400).json({
             success: false,
-            message: 'No user found with given ID.'
-        });
-    }
-
-    // If User founded, then send its details.
-    res.status(200).json({
-        success: true,
-        user
-    });
-});
-
-exports.adminUpdateSingleUserDetails = BigPromise(async (req, res, next) => {
-
-    // Collect data from Params.
-    const { id } = req.params;
-
-    // Check for mandatory a data.
-    if (!id) {
-        return res.status(400).json({
-            success: false,
-            message: 'Please provide user id.'
+            message: 'Please provide user role.'
         });
     }
 
@@ -490,76 +506,7 @@ exports.adminUpdateSingleUserDetails = BigPromise(async (req, res, next) => {
         });
     }
 
-    // This newData object will collect all data that admin want to update.
-    var newData = {}
-
-    // Admin will not be able to change name of any user.
-    if (req.body.name) {
-        return (res.status(400).json({
-            success: false,
-            message: "Sorry, you can not update name."
-        }));
-    }
-
-    // Admin will not be able to change email of any user.
-    if (req.body.email) {
-        return (res.status(400).json({
-            success: false,
-            message: "Sorry, you can not update email."
-        }));
-    }
-
-    // Admin will not be able to change password of any user.
-    if (req.body.password) {
-        return (res.status(400).json({
-            success: false,
-            message: "Sorry, you can not update password."
-        }));
-    }
-
-    // Admin will not be able to change photo of any user.
-    if (req.files) {
-        return (res.status(400).json({
-            success: false,
-            message: "Sorry, you can not update date of birth."
-        }));
-    }
-
-    // Admin will not be able to change DOB of any user.
-    if (req.body.DOB) {
-        return (res.status(400).json({
-            success: false,
-            message: "Sorry, you can not update date of birth."
-        }));
-    }
-
-    // Admin will not be able to change gender of any user.
-    if (req.body.gender) {
-        return (res.status(400).json({
-            success: false,
-            message: "Sorry, you can not update gender."
-        }));
-    }
-
-    // Admin will be able to change role of any user.
-    if (req.body.role) {
-        // Check if provided user role is valid or not as per our project.
-        if (!(req.body.role === 'student' || req.body.role === 'faculty' || req.body.role === 'admin')) {
-            return res.status(400).json({
-                success: false,
-                message: 'Please provide role only from - student or faculty or admin.'
-            });
-        }
-
-        // TODO:: if user's current role is faculty and we are changing it, then take care of courses and blogs vala part.
-        // TODO:: if user's current role is student and we are changing it, then take care of courses vala part.
-
-        // If admin is changing role then save that new role in newData object.
-        newData.role = req.body.role;
-    }
-
-    // Update and save User details in DB.
-    user = await User.findByIdAndUpdate(id, newData, {
+    user = await User.findByIdAndUpdate(id, { role: role }, {
         new: true,
         runValidators: true,
         useFindAndModify: false
@@ -567,8 +514,10 @@ exports.adminUpdateSingleUserDetails = BigPromise(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
+        message: "Role updated.",
         user
     });
+
 });
 
 exports.adminDeleteSingleUser = BigPromise(async (req, res, next) => {
@@ -668,3 +617,15 @@ exports.adminDeleteSingleUser = BigPromise(async (req, res, next) => {
     });
 
 });
+
+
+
+
+
+
+
+
+
+const createActivationToken = (payload) => {
+    return jwt.sign(payload, process.env.ACTIVATION_TOKEN_SECRET, { expiresIn: '5m' });
+}
