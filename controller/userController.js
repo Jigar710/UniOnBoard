@@ -13,10 +13,6 @@ const { CLIENT_URL } = process.env
 
 
 //========== Student, Faculty, Admin routes ==========//
-exports.home = BigPromise(async (req, res, next) => {
-    res.send("<h1>UniOnBoard Home</h1>")
-})
-
 exports.signup = BigPromise(async (req, res, next) => {
 
     // Collect data from Body.

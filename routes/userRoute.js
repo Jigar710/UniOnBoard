@@ -19,7 +19,6 @@ const { isLoggedIn, customRole } = require("../middleware/userMiddleware");
 
 
 //========== Student, faculty, Admin routes ==========//
-router.route("/").get(home);
 router.route("/signup").post(signup);
 router.route("/activateEmail/:token").post(activateEmail);
 router.route("/login").post(login);
