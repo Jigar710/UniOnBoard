@@ -10,7 +10,7 @@ const mailHelper = async (option) => {
         // ignoreTLS:true,
         auth: {
             user: "smitghelani.bodhlabs@gmail.com",
-            pass: "bodhlabs@123"
+            pass: "BoDhLaBs#4321"
         }
     });
 

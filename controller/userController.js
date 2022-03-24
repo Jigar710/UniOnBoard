@@ -328,7 +328,7 @@ exports.forgotPassword = BigPromise(async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
 
     // Create URL ---> http://localhost:4000/password/reset/{token}
-    const url = `${req.protocol}://${req.get("host")}/resetPassword/${forgotToken}`;
+    const url = `${CLIENT_URL}/resetPassword/${forgotToken}`
 
     // Attempt to send mail.
     try {
