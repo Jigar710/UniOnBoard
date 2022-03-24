@@ -11,6 +11,8 @@ const connectWithDB = require("./config/db");
 const userRoute = require('./routes/userRoute');
 const blogRoute = require('./routes/blogRoute');
 const instituteRoute = require('./routes/instituteRoute');
+const adminRoute = require('./routes/adminRoute');
+
 
 const cors = require('cors');
 
@@ -43,6 +45,8 @@ app.use(cors({
 app.use('/', userRoute);
 app.use('/', blogRoute);
 app.use('/', instituteRoute);
+app.use('/', adminRoute);
+
 
 
 
