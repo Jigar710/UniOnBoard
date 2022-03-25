@@ -286,6 +286,7 @@ exports.updateUserDetails = BigPromise(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
+        message: "Details Updated" ,
         user
     });
 });
@@ -452,7 +453,10 @@ exports.updatePassword = BigPromise(async (req, res, next) => {
     // Save changes in DB
     await user.save();
 
-    cookieToken(user, res);
+    res.status(200).json({
+        success: true,
+        message: "Password Changed"
+    })
 });
 
 

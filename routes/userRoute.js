@@ -27,6 +27,7 @@ router.route("/logout").get(logout);
 router.route("/dashboard").get(isLoggedIn, getLoggedInUserDetails);
 router.route("/dashboard/update").put(isLoggedIn, updateUserDetails);
 
+
 router.route("/forgotPassword").post(forgotPassword);
 router.route("/resetPassword/:token").post(resetPassword);
 router.route("/updatePassword").post(isLoggedIn, updatePassword);
