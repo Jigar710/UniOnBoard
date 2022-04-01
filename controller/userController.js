@@ -563,7 +563,7 @@ exports.adminDeleteSingleUser = BigPromise(async (req, res, next) => {
         // this for loop will iterate through all blogs.
         for (let i = 0; i < blogs.length; ++i) {
             // this will compare user id available in DB for particular blog with given user id.
-            if (blogs[i].author.toString() === id.toString()) {
+            if (blogs[i].author.authorID.toString() === id.toString()) {
                 // Delete Image of that blog.
                 const result = await cloudinary.uploader.destroy(blogs[i].photo.id);
                 // remove that blog from DB.
