@@ -4,6 +4,8 @@ const router = express.Router();
 
 const { signup,
     activateEmail,
+    signupFaculty,
+    activateEmailFaculty,
     login,
     logout,
     getLoggedInUserDetails,
@@ -13,14 +15,20 @@ const { signup,
     updatePassword,
     adminGetAllUser,
     adminUpdateRole,
-    adminDeleteSingleUser } = require("../controller/userController");
+    adminDeleteSingleUser,
+    adminGetRequestedFaculties,
+    adminVerifyOneFaculty } = require("../controller/userController");
 
 const { isLoggedIn, customRole } = require("../middleware/userMiddleware");
 
 
-//========== Student, faculty, Admin routes ==========//
+//========== Student, Faculty, Admin routes ==========//
 router.route("/signup").post(signup);
 router.route("/activateEmail/:token").post(activateEmail);
+
+router.route("/signupFaculty").post(signupFaculty);
+router.route("/activateEmailFaculty/:token").post(activateEmailFaculty);
+
 router.route("/login").post(login);
 router.route("/logout").get(logout);
 
@@ -38,9 +46,15 @@ router.route("/updatePassword").post(isLoggedIn, updatePassword);
 
 //========== Admin only routes ==========//
 router.route("/admin/getAllUsers").get(isLoggedIn, customRole("admin"), adminGetAllUser);
+
 router.route("/admin/singleuser/:id")
     .put(isLoggedIn, customRole("admin"), adminUpdateRole)
     .delete(isLoggedIn, customRole("admin"), adminDeleteSingleUser);
+
+router.route("/admin/getRequestedFaculties").get(isLoggedIn, customRole("admin"), adminGetRequestedFaculties);
+router.route("/admin/verifyOneFaculty/:id").get(isLoggedIn, customRole("admin"), adminVerifyOneFaculty);
+
+
 
 
 

@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const Blog = require("../models/blogModel");
+const ReqFaculty = require("../models/requestedFacyltyModel");
 const BigPromise = require("../middleware/bigPromise");
-const CustomError = require("../utils/customError");
 const cookieToken = require("../utils/cookieToken");
 const cloudinary = require("cloudinary").v2;
 const { signValidation, loginValidation } = require("../models/validation");
@@ -119,6 +119,155 @@ exports.activateEmail = BigPromise(async (req, res) => {
         success: true,
         message: "Account has been activated. Please Login"
     });
+
+
+
+
+});
+
+exports.signupFaculty = BigPromise(async (req, res, next) => {
+
+    // Collect data from Body.
+    const { name, email, password, conf_password, role } = req.body;
+
+    // Check for mandatory a data.
+    const { error } = signValidation(req.body);
+    if (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message
+        });
+    }
+    if (!req.files) {
+        return res.status(400).json({
+            success: false,
+            message: "Faculty ID proff is required."
+        });
+    }
+    // Check if both password fields matched or not.
+    if (password !== conf_password) {
+        return res.status(400).json({
+            success: false,
+            message: 'Password and Confirm Password does not matched.'
+        });
+    }
+
+    const { idProff } = req.files
+
+    // Check duplicate User base on email.
+    const emailExist = await ReqFaculty.findOne({ email });
+    if (emailExist) {
+        return res.status(400).json({
+            success: false,
+            message: 'You have already requested. Please wait for admin responce'
+        });
+    }
+
+    // Check if provided user role is valid or not as per our project.
+    if (!(role === 'student' || role === 'faculty')) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide role only from - student or faculty.'
+        });
+    }
+
+
+    // Collect all information of user.
+    const newUser = {
+        name,
+        email,
+        password,
+        role,
+        idProff
+    }
+
+    // Create token containing all information of user.
+    const activation_token = createActivationToken(newUser);
+
+    // Generate url --> http://localhost:4000/activateEmail/{activation_token}
+    const url = `${CLIENT_URL}/activateEmailFaculty/${activation_token}`
+
+    // Attempt to send mail.
+    try {
+        await mailHelper({
+            email: email,
+            subject: `UniOnBoard - Activate your account`,
+            url: url,
+            txt: "Validate Email"
+        });
+
+        // Json responce if mail is sent.
+        res.status(200).json({
+            success: true,
+            message: "Registered successfully, Please activate your email to start."
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error
+        });
+    }
+
+});
+
+exports.activateEmailFaculty = BigPromise(async (req, res) => {
+
+    // Collect data from Params.
+    const { token } = req.params
+
+    // Check for mandatory a data.
+    if (!token) {
+        return res.status(400).json({
+            success: false,
+            message: 'Unauthorised Access'
+        });
+    }
+
+    // Decode user information stored in token
+    const userInfo = jwt.verify(token, process.env.ACTIVATION_TOKEN_SECRET)
+
+    // Collect all information of user.
+    var { name, email, password, role, idProff } = userInfo
+
+    // Image size should be less than 1 MB.
+    if (idProff.size > 1024 * 1024) {
+        return res.status(400).json({
+            success: false,
+            message: "Photo size is too large."
+        })
+    }
+
+    // Only jpeg or png file are allowed.
+    if (idProff.mimetype !== 'image/jpeg' && idProff.mimetype !== 'image/png') {
+        return res.status(400).json({
+            success: false,
+            message: "File format is incorrect. Acceptable image format - jpeg, png "
+        })
+    }
+
+    const result = await cloudinary.uploader.upload(idProff.tempFilePath, {
+        folder: "Faculty ID Proff",
+        width: 150,
+        crop: "scale"
+    });
+
+    idProff = {
+        id: result.public_id,
+        secure_url: result.secure_url
+    }
+
+    // Create and save user in DB.
+    const user = new ReqFaculty({
+        name, email, password, role, "IDProff": idProff
+    })
+    await user.save()
+
+    res.status(200).json({
+        success: true,
+        message: "You will be authorised faculty on our plateform, once admin verify your details.This process may takes one or two days."
+    });
+
 
 });
 
@@ -252,7 +401,7 @@ exports.updateUserDetails = BigPromise(async (req, res, next) => {
         if (file.size > 1024 * 1024) {
             return res.status(400).json({
                 success: false,
-                message: "Size too large."
+                message: "Photo size is too large."
             })
         }
 
@@ -286,7 +435,7 @@ exports.updateUserDetails = BigPromise(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        message: "Details Updated" ,
+        message: "Details Updated",
         user
     });
 });
@@ -617,6 +766,57 @@ exports.adminDeleteSingleUser = BigPromise(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: "User deleted."
+    });
+
+});
+
+exports.adminGetRequestedFaculties = BigPromise(async (req, res, next) => {
+
+    const reqFaculties = await ReqFaculty.find().select("-password");
+
+    res.status(200).json({
+        success: true,
+        faculties: reqFaculties
+    });
+
+});
+
+exports.adminVerifyOneFaculty = BigPromise(async (req, res, next) => {
+
+    // Collect data.
+    const { id } = req.params;
+
+    if (!id) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide user id.'
+        });
+    }
+
+    // Check if such requested faculty exist or not in DB base on id.
+    var reqFaculty = await ReqFaculty.findById(id).select("+password");
+    if (!reqFaculty) {
+        return res.status(400).json({
+            success: false,
+            message: 'No such request.'
+        });
+    }
+
+
+    const { name, email, password, role, IDProff } = reqFaculty
+
+    // Create and save faculty in User schema.
+    const faculty = new User({
+        name, email, password, role, IDProff
+    })
+    await faculty.save()
+
+    // remove faculty from reqfaculties schema.
+    await reqFaculty.remove();
+
+    res.status(200).json({
+        success: true,
+        message: "Requested Granted."
     });
 
 });

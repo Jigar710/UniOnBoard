@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-// SIGNUP VALIDATION SCHEMA
+// SIGNUP VALIDATION
 const signValidation = (data) => {
     const schema = Joi.object({
         name: Joi.string()
@@ -25,8 +25,7 @@ const signValidation = (data) => {
     return schema.validate(data);
 }
 
-
-// LOGIN VALIDATION SCHEMA
+// LOGIN VALIDATION
 const loginValidation = (data) => {
     const schema = Joi.object({
         email: Joi.string()
@@ -40,7 +39,7 @@ const loginValidation = (data) => {
     return schema.validate(data);
 }
 
-// ADD BLOG VALIDATION SCHEMA
+// ADD BLOG VALIDATION
 const addBlogValidation = (data) => {
     const schema = Joi.object({
         title: Joi.string()
@@ -50,7 +49,7 @@ const addBlogValidation = (data) => {
     return schema.validate(data);
 }
 
-// ADD REVIEW VALIDATION SCHEMA
+// ADD REVIEW VALIDATION
 const addReviewValidation = (data) => {
     const schema = Joi.object({
         rating: Joi.number()
