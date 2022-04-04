@@ -6,11 +6,12 @@ const cloudinary = require("cloudinary").v2;
 const Section = require('../models/sectionModel');
 const Course = require('../models/courseModel');
 const LandingPageData = require('../models/landingPageModel');
+const User = require('../models/userModel')
 const BigPromise = require('../middleware/bigPromise');
 
 
 exports.addCourseBasic = BigPromise(async (req,res,next) => {
-    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption} = req.body;
+    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption,AuthorId} = req.body;
 
     if(!CourseTitle){
         return res.status(400).send({
@@ -32,6 +33,21 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
             message:"Target audience for the course is required please make sure it's not empty"
         })
     }
+
+    if(!AuthorId){
+        return res.status(400).send({
+            success:false,
+            message:"Author Id is require please add"
+        })
+    }
+
+    const authorExist = await User.findById({_id:AuthorId});
+    if(!authorExist){
+        return res.status(400).send({
+            success:false,
+            message:"No such user exist with this id please enter valid id"
+        })
+    }
     
 
     const result = await Course.create({
@@ -40,6 +56,7 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
         CoursePrerequisite:CoursePrerequisite,
         CourseAudience:CourseAudience,
         LectureCaption:LectureCaption,
+        AuthorId:AuthorId
     })
 
     res.status(201).send({
@@ -62,7 +79,7 @@ exports.addSectionContent = BigPromise (async (req, res, next)=>{
         })
     }
     
-    const course = await Course.find({CourseId:CourseId})
+    const course = await Course.findById({_id:CourseId})
 
     if(!course){
         res.status(400).send({
@@ -207,7 +224,7 @@ exports.addLandingPage = BigPromise(async (req,res,next)=>{
         })
     }
 
-    const course = await Course.find({CourseId:CourseId})
+    const course = await Course.findById({_id:CourseId})
 
     if(!course){
         res.status(400).send({

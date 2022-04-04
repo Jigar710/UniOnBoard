@@ -22,6 +22,11 @@ const Course = new mongoose.Schema({
     }],
     LectureCaption:{
         type:String
+    },
+    AuthorId:{
+        type:Object,
+        ref:"users",
+        required: [true, "Course creater is required"]
     }
 });
 
