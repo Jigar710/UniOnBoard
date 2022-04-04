@@ -49,6 +49,15 @@ const userSchema = new mongoose.Schema({
         }
     },
 
+    IDProff: {
+        id: {
+            type: String,
+        },
+        secure_url: {
+            type: String,
+        }
+    },
+
     DOB: {
         type: Date,
     },
