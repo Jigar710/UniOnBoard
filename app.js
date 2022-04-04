@@ -12,6 +12,7 @@ const userRoute = require('./routes/userRoute');
 const blogRoute = require('./routes/blogRoute');
 const instituteRoute = require('./routes/instituteRoute');
 const adminRoute = require('./routes/adminRoute');
+const courseRoute = require('./routes/videoRoutes');
 
 
 const cors = require('cors');
@@ -33,7 +34,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload({
   useTempFiles: true,
-  tempFileDir: '/tmp/'
+  tempFileDir: './tmp/'
 }))
 
 app.use(cors({
@@ -46,7 +47,7 @@ app.use('/', userRoute);
 app.use('/', blogRoute);
 app.use('/', instituteRoute);
 app.use('/', adminRoute);
-
+app.use('/', courseRoute);
 
 
 
