@@ -52,7 +52,7 @@ router.route("/admin/singleuser/:id")
     .delete(isLoggedIn, customRole("admin"), adminDeleteSingleUser);
 
 router.route("/admin/getRequestedFaculties").get(isLoggedIn, customRole("admin"), adminGetRequestedFaculties);
-router.route("/admin/verifyOneFaculty/:id").get(isLoggedIn, customRole("admin"), adminVerifyOneFaculty);
+router.route("/admin/verifyOneFaculty/:id").put(isLoggedIn, customRole("admin"), adminVerifyOneFaculty);
 
 
 

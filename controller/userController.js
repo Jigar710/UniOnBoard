@@ -5,7 +5,7 @@ const BigPromise = require("../middleware/bigPromise");
 const cookieToken = require("../utils/cookieToken");
 const cloudinary = require("cloudinary").v2;
 const { signValidation, loginValidation } = require("../models/validation");
-const mailHelper = require("../utils/emailHelper");
+const { mailHelper, mailHelperFaculty } = require("../utils/emailHelper");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken")
 const { CLIENT_URL } = process.env
@@ -155,11 +155,18 @@ exports.signupFaculty = BigPromise(async (req, res, next) => {
     const { idProff } = req.files
 
     // Check duplicate User base on email.
-    const emailExist = await ReqFaculty.findOne({ email });
+    var emailExist = await ReqFaculty.findOne({ email });
     if (emailExist) {
         return res.status(400).json({
             success: false,
             message: 'You have already requested. Please wait for admin responce'
+        });
+    }
+    emailExist = await User.findOne({ email })
+    if (emailExist) {
+        return res.status(400).json({
+            success: false,
+            message: 'User with this email already exists.'
         });
     }
 
@@ -205,6 +212,7 @@ exports.signupFaculty = BigPromise(async (req, res, next) => {
     } catch (error) {
         res.status(400).json({
             success: false,
+            k: "kalp",
             message: error
         });
     }
@@ -648,6 +656,12 @@ exports.adminUpdateRole = BigPromise(async (req, res) => {
             message: 'Please provide user role.'
         });
     }
+    if (!(role === 'student' || role === 'faculty')) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide role only from - student or faculty.'
+        });
+    }
 
     // Check if User exist or not in DB base on id.
     var user = await User.findById(id);
@@ -785,6 +799,7 @@ exports.adminVerifyOneFaculty = BigPromise(async (req, res, next) => {
 
     // Collect data.
     const { id } = req.params;
+    const { tag } = req.body;
 
     if (!id) {
         return res.status(400).json({
@@ -792,6 +807,19 @@ exports.adminVerifyOneFaculty = BigPromise(async (req, res, next) => {
             message: 'Please provide user id.'
         });
     }
+    if (!tag) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide verification tag.'
+        });
+    }
+    if (!(tag === 'verified' || tag === 'unverified')) {
+        return res.status(400).json({
+            success: false,
+            message: 'Please provide role only from - student or faculty.'
+        });
+    }
+
 
     // Check if such requested faculty exist or not in DB base on id.
     var reqFaculty = await ReqFaculty.findById(id).select("+password");
@@ -802,22 +830,74 @@ exports.adminVerifyOneFaculty = BigPromise(async (req, res, next) => {
         });
     }
 
-
     const { name, email, password, role, IDProff } = reqFaculty
 
-    // Create and save faculty in User schema.
-    const faculty = new User({
-        name, email, password, role, IDProff
-    })
-    await faculty.save()
+    if (tag === 'verified') {
 
-    // remove faculty from reqfaculties schema.
-    await reqFaculty.remove();
+        // Create and save faculty in User schema.
+        const faculty = new User({
+            name, email, password, role, IDProff
+        })
+        await faculty.save()
 
-    res.status(200).json({
-        success: true,
-        message: "Requested Granted."
-    });
+        // remove faculty from reqfaculties schema.
+        await reqFaculty.remove();
+
+        // Respnoce to faculty
+        // Attempt to send mail.
+        try {
+            await mailHelperFaculty({
+                email: email,
+                subject: `UniOnBoard - Verification of your account`,
+                txt: "Your are verified successfully. Please continue with our plateform."
+            });
+        } catch (error) {
+            res.status(400).json({
+                success: false,
+                message: error
+            });
+        }
+
+        // Respnoce to admin
+        res.status(200).json({
+            success: true,
+            message: "Faculty has been verified successfully."
+        });
+
+    }
+    else if (tag === 'unverified') {
+
+        // If faculty photo is there then delete it.
+        const imageId = reqFaculty.IDProff.id
+        if (imageId) {
+            const resp = await cloudinary.uploader.destroy(reqFaculty.IDProff.id);
+        }
+
+        // remove faculty from reqfaculties schema.
+        await reqFaculty.remove();
+
+        // Respnoce to faculty
+        // Attempt to send mail.
+        try {
+            await mailHelperFaculty({
+                email: email,
+                subject: `UniOnBoard - Verification of your account`,
+                txt: "Sorry, we find something unusual in your request. So your request has been declined."
+            });
+        } catch (error) {
+            res.status(400).json({
+                success: false,
+                message: error
+            });
+        }
+
+        // Respnoce to admin
+        res.status(200).json({
+            success: true,
+            message: "Faculty has been unverified successfully."
+        });
+
+    }
 
 });
 

@@ -40,5 +40,44 @@ const mailHelper = async (option) => {
     });
 };
 
+const mailHelperFaculty = async (option) => {
 
-module.exports = mailHelper;
+    // create reusable transporter object using the default SMTP transport
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        port: 587,
+        // secure:false,
+        // ignoreTLS:true,
+        auth: {
+            user: "smitghelani.bodhlabs@gmail.com",
+            pass: "BoDhLaBs#4321"
+        }
+    });
+
+    const message = {
+        from: 'noreply@gmail.com', // sender address
+        to: option.email, // list of receivers
+        subject: option.subject, // Subject line
+        html: `
+            <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
+            <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to UniOnBoard - The College Guide.</h2>
+            
+        
+            <div>${option.txt}</div>
+            <div><h3>Thank You</h3></div>
+            </div>`
+    }
+
+    // send mail with defined transport object
+    await transporter.sendMail(message, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+};
+
+
+module.exports.mailHelper = mailHelper;
+module.exports.mailHelperFaculty = mailHelperFaculty;
