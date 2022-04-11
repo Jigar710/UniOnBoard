@@ -13,6 +13,10 @@ const Section = new mongoose.Schema({
         type: String,
         required: [true, "Please Provide Section name"]
     },
+    LectureNo:{
+        type:Number,
+        required:[true ,"Please Provide Lecture Number"]
+    },
     ContentType:{
         type:String,
         enum:[

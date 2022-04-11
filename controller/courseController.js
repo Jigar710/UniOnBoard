@@ -6,11 +6,13 @@ const cloudinary = require("cloudinary").v2;
 const Section = require('../models/sectionModel');
 const Course = require('../models/courseModel');
 const LandingPageData = require('../models/landingPageModel');
+const User = require('../models/userModel')
 const BigPromise = require('../middleware/bigPromise');
+const { count } = require('../models/sectionModel');
 
 
 exports.addCourseBasic = BigPromise(async (req,res,next) => {
-    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption} = req.body;
+    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption,AuthorId} = req.body;
 
     if(!CourseTitle){
         return res.status(400).send({
@@ -32,6 +34,21 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
             message:"Target audience for the course is required please make sure it's not empty"
         })
     }
+
+    if(!AuthorId){
+        return res.status(400).send({
+            success:false,
+            message:"Author Id is require please add"
+        })
+    }
+
+    const authorExist = await User.findById({_id:AuthorId});
+    if(!authorExist){
+        return res.status(400).send({
+            success:false,
+            message:"No such user exist with this id please enter valid id"
+        })
+    }
     
 
     const result = await Course.create({
@@ -40,6 +57,7 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
         CoursePrerequisite:CoursePrerequisite,
         CourseAudience:CourseAudience,
         LectureCaption:LectureCaption,
+        AuthorId:AuthorId
     })
 
     res.status(201).send({
@@ -50,7 +68,7 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
 
 exports.addSectionContent = BigPromise (async (req, res, next)=>{
     
-    const {CourseId,SectionNo,SectionName, ContentType, VideoName, LectureDesc} = req.body;
+    const {CourseId,SectionNo,SectionName, LectureNo, ContentType, VideoName, LectureDesc} = req.body;
     const LectureVideo = req.files.LectureVideo;
     const LectureResourceFile = req.files.LectureResourceFile;
 
@@ -62,7 +80,7 @@ exports.addSectionContent = BigPromise (async (req, res, next)=>{
         })
     }
     
-    const course = await Course.find({CourseId:CourseId})
+    const course = await Course.findById({_id:CourseId})
 
     if(!course){
         res.status(400).send({
@@ -85,10 +103,17 @@ exports.addSectionContent = BigPromise (async (req, res, next)=>{
             message:"Please give name to the section"
         })
     }
+    if(!LectureNo){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide lecture number"
+        })
+    }
+
     if(!ContentType){
         return res.status(400).send({
             success:false,
-            message:"content type is missing"
+            message:"Content type is missing"
         })
     }
     if(!VideoName){
@@ -118,7 +143,10 @@ exports.addSectionContent = BigPromise (async (req, res, next)=>{
         }
     );
     
-    var resultResource = undefined;
+    var resultResource = {
+        id:"",
+        secure_url:""
+    };
 
     if(LectureResourceFile){
         
@@ -133,7 +161,7 @@ exports.addSectionContent = BigPromise (async (req, res, next)=>{
     var result = undefined;
     var courseData = undefined;
 
-    const existingSection = await Section.findOne({CourseId:CourseId, SectionNo:SectionNo});
+    const existingSection = await Section.findOne({CourseId:CourseId, SectionNo:SectionNo, LectureNo:LectureNo});
 
     if(existingSection){
         result = await Section.findByIdAndUpdate({_id:existingSection._id},{$set:
@@ -141,6 +169,7 @@ exports.addSectionContent = BigPromise (async (req, res, next)=>{
                 CourseId:CourseId,
                 SectionNo:SectionNo,
                 SectionName:SectionName,
+                LectureNo:LectureNo,
                 ContentType:ContentType,
                 VideoName:VideoName,
                 LectureDesc:LectureDesc,
@@ -159,6 +188,7 @@ exports.addSectionContent = BigPromise (async (req, res, next)=>{
             CourseId:CourseId,
             SectionNo:SectionNo,
             SectionName:SectionName,
+            LectureNo:LectureNo,
             ContentType:ContentType,
             VideoName:VideoName,
             LectureDesc:LectureDesc,
@@ -171,13 +201,12 @@ exports.addSectionContent = BigPromise (async (req, res, next)=>{
                 secure_url:resultResource.secure_url
             }
         }) 
-        courseData = await Course.update({CourseId:CourseId},{$push:{Section:result._id}}).exec();
+        await Course.where({'_id':CourseId}).updateOne({$push:{Section:result._id}}).exec();
     }
 
     res.status(201).send({
         success:true,
-        result,
-        courseData
+        result
     })
 
 })
@@ -207,7 +236,7 @@ exports.addLandingPage = BigPromise(async (req,res,next)=>{
         })
     }
 
-    const course = await Course.find({CourseId:CourseId})
+    const course = await Course.findById({_id:CourseId})
 
     if(!course){
         res.status(400).send({
@@ -268,7 +297,10 @@ exports.addLandingPage = BigPromise(async (req,res,next)=>{
         folder:"courseimgs"
     });
 
-    var resultPromo = undefined;
+    var resultPromo = {
+        id:"",
+        secure_url:""
+    };
     if(CoursePromo){
         resultPromo = await cloudinary.uploader.upload(CoursePromo.tempFilePath,{
             resource_type: "video",
@@ -310,7 +342,7 @@ exports.addLandingPage = BigPromise(async (req,res,next)=>{
     const existingPage = await LandingPageData.findOne({CourseId:CourseId});
 
     if(existingPage){
-        result= await LandingPageData.findByIdAndUpdate({_id:existingPage._id},{$set:
+        result = await LandingPageData.findByIdAndUpdate({_id:existingPage._id},{$set:
             {
                 CourseId:CourseId, 
                 CourseTitle:CourseTitle,
@@ -367,4 +399,122 @@ exports.addLandingPage = BigPromise(async (req,res,next)=>{
     });
 
 
+})
+
+exports.getAllCourses = BigPromise(async (req, res, next) =>{
+
+    const result = await Course.find();
+    const resultMore = await LandingPageData.find();
+
+    const allCourse = []
+    for(let x in result){
+        for (let y in resultMore){
+            if(result[x]._id == resultMore[y].CourseId){
+                const authorData = await User.find({_id:result[x].AuthorId})
+                const temp_data = {dataOne:result[x],dataTwo:resultMore[y],dataThree:authorData[0]}
+                allCourse.push(temp_data)
+            }
+        }
+    }
+
+    res.status(200).send({
+        success:true,
+        allCourse
+    })
+})
+
+exports.findAllSections = BigPromise(async(req,res,next)=>{
+
+    const {id} = req.params; 
+    const result = await Course.findOne({_id:id});
+    const dataAll = []
+    var resultData = [];
+
+    for(let i=1; i<=result.Section.length;i++){
+        const temp = await Section.findOne({_id:result.Section[i-1]});
+        resultData.push(temp)
+    }
+
+    var secNo = 1;
+    var cnt=0;
+    for(let i=0;i<resultData.length;i++){
+        if(dataAll.length == resultData.length){
+            break
+        }
+        for(let k=0;k<resultData.length;k++){
+            if(dataAll.length == resultData.length){
+                break
+            }
+            if(resultData[k].SectionNo == secNo){
+                var lecNo =1
+                for(let j=0;j< resultData.length;j++){
+                    if(dataAll.length == resultData.length){
+                        break
+                    }
+                    if(await resultData[k].LectureNo == lecNo){
+                        dataAll.push(resultData[k])
+                        cnt+=1
+                        lecNo+=1
+                        k+=1
+                    }
+                }
+            }
+        }
+        secNo+=1
+    }
+
+    res.status(200).send({
+        success:true,
+        result,
+        dataAll
+    })
+})
+
+exports.getAllLandingPageData = BigPromise(async(req, res, next) =>{
+    const {id} = req.params;
+
+    if(!id){
+        res.status(400).send({
+            success:false,
+            message:"Please provide course Id"
+        })
+    }
+
+    const courseData = await Course.findOne({_id:id});
+
+    if(!courseData){
+        res.status(400).send({
+            success:false,
+            message:"No such course available in our database"
+        })
+    }
+
+    const landingPageData = await LandingPageData.findOne({CourseId:id});
+
+    if(!landingPageData){
+        res.status(400).send({
+            message:false,
+            message:"no landinbg page data found"
+        })
+    }
+
+    const author = await User.findOne({_id:courseData.AuthorId});
+    const sectionCount = courseData.Section.length
+
+    if(!author){
+        res.status(400).send({
+            success:false,
+            message:"User assosiated with this course is not exist"
+        })
+    }
+
+    res.status(200).send({
+        success:true,
+        data:{
+            landingPageData,
+            author,
+            courseData,
+            sessionCount:sectionCount
+        }
+    })
 })
