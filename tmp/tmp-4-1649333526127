@@ -1,0 +1,15 @@
+model:
+{
+blog_title
+blog_cover_photo
+blog_content
+blog_category
+blog_author
+blog_author_id
+createdAt
+tag
+ratings(avrage stars)
+reviews(stars)
+comments
+}
+
