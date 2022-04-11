@@ -27,6 +27,10 @@ const Course = new mongoose.Schema({
         type:Object,
         ref:"users",
         required: [true, "Course creater is required"]
+    },
+    createdAt:{
+        type:Date,
+        default: Date.now()
     }
 });
 
