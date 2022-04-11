@@ -75,7 +75,6 @@ const LandingPageData = new mongoose.Schema({
         },
         secure_url:{
             type: String,
-            required: true,
             default: ""
         } 
     },
