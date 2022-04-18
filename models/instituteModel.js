@@ -70,7 +70,7 @@ const instituteSchema = new mongoose.Schema({
         default: ""
     }],
     fees:{
-        type:String,
+        type:Number,
         default: ""
     },
     approvedBy:{

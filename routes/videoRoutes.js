@@ -11,3 +11,4 @@ router.route('/getCourseContent/:id').get(findAllSections);
 router.route('/getLandingPageData/:id').get(getAllLandingPageData);
 
 module.exports = router;
+ 
