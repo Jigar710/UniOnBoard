@@ -8,11 +8,10 @@ const Course = require('../models/courseModel');
 const LandingPageData = require('../models/landingPageModel');
 const User = require('../models/userModel')
 const BigPromise = require('../middleware/bigPromise');
-const { count } = require('../models/sectionModel');
 
 
 exports.addCourseBasic = BigPromise(async (req,res,next) => {
-    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption,AuthorId} = req.body;
+    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption} = req.body;
 
     if(!CourseTitle){
         return res.status(400).send({
@@ -35,21 +34,13 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
         })
     }
 
-    if(!AuthorId){
+    console.log(req.user)
+    if(!req.user.id){
         return res.status(400).send({
             success:false,
             message:"Author Id is require please add"
         })
     }
-
-    const authorExist = await User.findById({_id:AuthorId});
-    if(!authorExist){
-        return res.status(400).send({
-            success:false,
-            message:"No such user exist with this id please enter valid id"
-        })
-    }
-    
 
     const result = await Course.create({
         CourseTitle:CourseTitle,
@@ -57,7 +48,7 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
         CoursePrerequisite:CoursePrerequisite,
         CourseAudience:CourseAudience,
         LectureCaption:LectureCaption,
-        AuthorId:AuthorId
+        AuthorId:req.user.id
     })
 
     res.status(201).send({
@@ -430,37 +421,38 @@ exports.findAllSections = BigPromise(async(req,res,next)=>{
     const dataAll = []
     var resultData = [];
 
-    for(let i=1; i<=result.Section.length;i++){
-        const temp = await Section.findOne({_id:result.Section[i-1]});
-        resultData.push(temp)
+    for(let i=0; i<result.Section.length;i++){
+        const temp = await Section.findOne({_id:result.Section[i]});
+        if(temp !== null){
+            resultData.push(temp)
+        }
+        
     }
-
+    
     var secNo = 1;
-    var cnt=0;
+    var lecNo = 1;
+    cnt=0
     for(let i=0;i<resultData.length;i++){
-        if(dataAll.length == resultData.length){
+        if(cnt === resultData.length && dataAll.length === resultData.length){
             break
         }
         for(let k=0;k<resultData.length;k++){
-            if(dataAll.length == resultData.length){
+            if(cnt === resultData.length && dataAll.length === resultData.length){
                 break
             }
-            if(resultData[k].SectionNo == secNo){
-                var lecNo =1
-                for(let j=0;j< resultData.length;j++){
-                    if(dataAll.length == resultData.length){
-                        break
-                    }
-                    if(await resultData[k].LectureNo == lecNo){
-                        dataAll.push(resultData[k])
-                        cnt+=1
-                        lecNo+=1
-                        k+=1
-                    }
+            if(resultData[k] === undefined){
+                continue
+            }
+            if(resultData[k].SectionNo === secNo ){
+                if(resultData[k].LectureNo == lecNo){
+                    dataAll.push(resultData[k])
+                    lecNo+=1
+                    cnt+=1
                 }
             }
         }
         secNo+=1
+        lecNo=1
     }
 
     res.status(200).send({

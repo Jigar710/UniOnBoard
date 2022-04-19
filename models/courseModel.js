@@ -34,4 +34,4 @@ const Course = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('course',Course);
+module.exports = mongoose.model('courses',Course);

@@ -13,6 +13,7 @@ const blogRoute = require('./routes/blogRoute');
 const instituteRoute = require('./routes/instituteRoute');
 const adminRoute = require('./routes/adminRoute');
 const courseRoute = require('./routes/videoRoutes');
+const predictionRoute = require('./routes/pedictionRoutes');
 
 
 const cors = require('cors');
@@ -48,6 +49,7 @@ app.use('/', blogRoute);
 app.use('/', instituteRoute);
 app.use('/', adminRoute);
 app.use('/', courseRoute);
+app.use('/', predictionRoute);
 
 
 
