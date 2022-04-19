@@ -11,7 +11,7 @@ const BigPromise = require('../middleware/bigPromise');
 
 
 exports.addCourseBasic = BigPromise(async (req,res,next) => {
-    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption,AuthorId} = req.body;
+    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption} = req.body;
 
     if(!CourseTitle){
         return res.status(400).send({
@@ -34,21 +34,13 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
         })
     }
 
-    if(!AuthorId){
+    console.log(req.user)
+    if(!req.user.id){
         return res.status(400).send({
             success:false,
             message:"Author Id is require please add"
         })
     }
-
-    const authorExist = await User.findById({_id:AuthorId});
-    if(!authorExist){
-        return res.status(400).send({
-            success:false,
-            message:"No such user exist with this id please enter valid id"
-        })
-    }
-    
 
     const result = await Course.create({
         CourseTitle:CourseTitle,
@@ -56,7 +48,7 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
         CoursePrerequisite:CoursePrerequisite,
         CourseAudience:CourseAudience,
         LectureCaption:LectureCaption,
-        AuthorId:AuthorId
+        AuthorId:req.user.id
     })
 
     res.status(201).send({
@@ -436,7 +428,7 @@ exports.findAllSections = BigPromise(async(req,res,next)=>{
         }
         
     }
-    console.log(resultData)
+    
     var secNo = 1;
     var lecNo = 1;
     cnt=0
