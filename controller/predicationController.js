@@ -6,7 +6,7 @@ const Institute = require('../models/instituteModel');
 
 exports.calculateRank = BigPromise(async (req, res, next) =>{
     const {gujcetPR, sciencePR} = req.body
-
+    console.log(gujcetPR, sciencePR);
     if(gujcetPR < 0 || gujcetPR > 100 ){
         res.status(400).send({
             success: false,
@@ -33,7 +33,7 @@ exports.calculateRank = BigPromise(async (req, res, next) =>{
     res.status(200).send({
         success: true,
         rank:rank
-    })
+    });
 });
 
 exports.collegeRecommander = bigPromise(async(req, res, next) =>{
