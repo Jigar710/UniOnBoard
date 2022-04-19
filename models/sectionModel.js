@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const Section = new mongoose.Schema({
     CourseId:{
-        type:Object,
-        ref:'course'
+        type:mongoose.Schema.ObjectId,
+        ref:'courses'
     },
     SectionNo:{
         type:Number,
