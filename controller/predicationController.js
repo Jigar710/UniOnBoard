@@ -3,6 +3,7 @@ const bigPromise = require('../middleware/bigPromise');
 const BigPromise = require('../middleware/bigPromise');
 const Merit = require('../models/meritModel');
 const Institute = require('../models/instituteModel');
+const Placement = require('../models/placementModel');
 
 exports.calculateRank = BigPromise(async (req, res, next) =>{
     const {gujcetPR, sciencePR} = req.body
@@ -2031,6 +2032,33 @@ exports.dataForComparison = BigPromise(async (req, res, next) =>{
     }
 
     const instituteData = await Institute.findOne({_id:id});
-    const plcData = await Plca
+    const plcData = await Placement.findOne({college_id:instituteData._id})
 
+    if(!instituteData || !plcData){
+        res.status(400).send({
+            success: false,
+            message:"no data found"
+        })
+    }
+
+    res.status(200).send({
+        success:true,
+        result:{
+            collegeImg:instituteData.images[0],
+            collegeLogo:instituteData.logo[0],
+            collegeName:instituteData.name,
+            city:plcData.city,
+            fees:instituteData.fees,
+            approvedBy:instituteData.approvedBy,
+            acceptedExam:instituteData.acceptedExam,
+            branches:instituteData.branches,
+            website:instituteData.website,
+            plcRate:plcData.plcRate,
+            maxPkg:plcData.maxPkg,
+            minPkg:plcData.minPkg,
+            avgPkg:plcData.avgPkg,
+            majorRec:plcData.majorComp,
+            lastYearHired:plcData.lastYearNoOFStudents
+        }
+    })
 })

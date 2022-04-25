@@ -5,12 +5,35 @@ const PlacementSchema = new mongoose.Schema({
         type:Number
     },
     collegeId:{
-        type:String,
+        type:Object,
         ref:"colleges"
     },
     collegeName:{
         type:String,
         required: [true, "College name is reqired"]
     },
-    minPkg
+    minPkg:{
+        type:Number
+    },
+    maxPkg:{
+        type:Number
+    },
+    avgPkg:{
+        type:Number
+    },
+    plcRate:{
+        type:Number
+    },
+    majorComp:[{
+        type:String
+    }],
+    lastYearNoOFStudents:{
+        type:Number
+    },
+    createdAt:{
+        type: Date,
+        default: Date.now()
+    }
 })
+
+module.exports = mongoose.model('placements',PlacementSchema)
