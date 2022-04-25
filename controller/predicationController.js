@@ -50,7 +50,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -64,7 +64,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -78,7 +78,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -92,7 +92,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -106,7 +106,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -120,7 +120,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -133,7 +133,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         }else{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -148,7 +148,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -160,7 +160,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         }else{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -178,7 +178,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -191,7 +191,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -204,7 +204,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -217,7 +217,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -230,7 +230,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -243,7 +243,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -255,7 +255,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         }else{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -269,7 +269,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -280,7 +280,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         }else{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -299,7 +299,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -313,7 +313,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -327,7 +327,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -341,7 +341,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -355,7 +355,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -369,7 +369,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -382,7 +382,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         }else{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -397,7 +397,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -409,7 +409,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         }else{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -427,7 +427,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -440,7 +440,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -453,7 +453,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -466,7 +466,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -479,7 +479,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -492,7 +492,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -504,7 +504,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         }else{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -518,7 +518,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -529,7 +529,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         }else{
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -549,7 +549,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -562,7 +562,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SC"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -575,7 +575,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "ST"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -588,7 +588,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -601,7 +601,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -614,7 +614,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -626,7 +626,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('city').equals(location).limit(50).exec();
+                                                    where('city').equals(location).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -640,7 +640,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -651,7 +651,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('city').equals(location).limit(50).exec();
+                                                    where('city').equals(location).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -668,7 +668,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -680,7 +680,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SC"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -692,7 +692,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "ST"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -704,7 +704,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -716,7 +716,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -728,7 +728,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -739,7 +739,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('city').equals(location).limit(50).exec();
+                                                    where('city').equals(location).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -752,7 +752,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -762,7 +762,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('city').equals(location).limit(50).exec();
+                                                    where('city').equals(location).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -780,7 +780,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -793,7 +793,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SC"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -806,7 +806,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "ST"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -819,7 +819,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -832,7 +832,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -845,7 +845,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -857,7 +857,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('city').equals(location).limit(50).exec();
+                                                    where('city').equals(location).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -871,7 +871,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -882,7 +882,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('city').equals(location).limit(50).exec();
+                                                    where('city').equals(location).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -899,7 +899,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -911,7 +911,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SC"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -923,7 +923,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "ST"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -935,7 +935,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -947,7 +947,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -959,7 +959,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -970,7 +970,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('city').equals(location).limit(50).exec();
+                                                    where('city').equals(location).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -983,7 +983,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             const meritList = await Merit.find().
                                                     where('city').equals(location).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -993,7 +993,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('city').equals(location).limit(50).exec();
+                                                    where('city').equals(location).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1015,7 +1015,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1028,7 +1028,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SC"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1041,7 +1041,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "ST"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1054,7 +1054,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1067,7 +1067,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1080,7 +1080,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1092,7 +1092,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1106,7 +1106,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1117,7 +1117,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1134,7 +1134,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1146,7 +1146,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SC"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1158,7 +1158,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "ST"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1170,7 +1170,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1182,7 +1182,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1194,7 +1194,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1205,7 +1205,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1218,7 +1218,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1228,7 +1228,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1246,7 +1246,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1259,7 +1259,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SC"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1272,7 +1272,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "ST"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1285,7 +1285,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1298,7 +1298,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1311,7 +1311,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1323,7 +1323,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1337,7 +1337,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1348,7 +1348,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1365,7 +1365,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1377,7 +1377,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SC"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1389,7 +1389,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "ST"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1401,7 +1401,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1413,7 +1413,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1425,7 +1425,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1436,7 +1436,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1449,7 +1449,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             const meritList = await Merit.find().
                                                     where('course').equals(branch).
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1459,7 +1459,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                         }else{
                             const meritList = await Merit.find().
-                                                    where('course').equals(branch).limit(50).exec();
+                                                    where('course').equals(branch).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1478,7 +1478,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1490,7 +1490,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "SC"){
                                 const meritList = await Merit.find().
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1502,7 +1502,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "ST"){
                                 const meritList = await Merit.find().
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1514,7 +1514,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1526,7 +1526,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1538,7 +1538,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1563,7 +1563,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                     }else{
                         if(rank){
                             const meritList = await Merit.find().
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1573,7 +1573,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                     }
                                 }
                         }else{
-                            const meritList = await Merit.find().limit(50).
+                            const meritList = await Merit.find().limit(10).
                                                     exec();
 
                                 for(let x of meritList){
@@ -1590,7 +1590,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1601,7 +1601,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "SC"){
                                 const meritList = await Merit.find().
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1612,7 +1612,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "ST"){
                                 const meritList = await Merit.find().
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1623,7 +1623,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1634,7 +1634,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1645,7 +1645,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1668,7 +1668,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                     }else{
                         if(rank){
                             const meritList = await Merit.find().
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1677,7 +1677,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                     }
                                 }
                         }else{
-                            const meritList = await Merit.find().limit(50).
+                            const meritList = await Merit.find().limit(10).
                                                     exec();
 
                                 for(let x of meritList){
@@ -1695,7 +1695,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1707,7 +1707,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "SC"){
                                 const meritList = await Merit.find().
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1719,7 +1719,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "ST"){
                                 const meritList = await Merit.find().
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1731,7 +1731,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1743,7 +1743,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1755,7 +1755,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1780,7 +1780,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                     }else{
                         if(rank){
                             const meritList = await Merit.find().
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).
@@ -1790,7 +1790,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                     }
                                 }
                         }else{
-                            const meritList = await Merit.find().limit(50).
+                            const meritList = await Merit.find().limit(10).
                                                     exec();
 
                                 for(let x of meritList){
@@ -1807,7 +1807,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                         if(rank){
                             if(category == "OPEN"){
                                 const meritList = await Merit.find().
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1818,7 +1818,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "SC"){
                                 const meritList = await Merit.find().
-                                                    where('sc_rank').gte(rank).limit(50).exec();
+                                                    where('sc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1829,7 +1829,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "ST"){
                                 const meritList = await Merit.find().
-                                                    where('st_rank').gte(rank).limit(50).exec();
+                                                    where('st_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1840,7 +1840,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "SEBC"){
                                 const meritList = await Merit.find().
-                                                    where('sebc_rank').gte(rank).limit(50).exec();
+                                                    where('sebc_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1851,7 +1851,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "EWS"){
                                 const meritList = await Merit.find().
-                                                    where('ews_rank').gte(rank).limit(50).exec();
+                                                    where('ews_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1862,7 +1862,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                             }
                             if(category == "AIOP"){
                                 const meritList = await Merit.find().
-                                                    where('aiop_rank').gte(rank).limit(50).exec();
+                                                    where('aiop_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1872,7 +1872,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                 }
                             }
                         }else{
-                            const meritList = await Merit.find().limit(50).exec();
+                            const meritList = await Merit.find().limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1884,7 +1884,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                     }else{
                         if(rank){
                             const meritList = await Merit.find().
-                                                    where('open_rank').gte(rank).limit(50).exec();
+                                                    where('open_rank').gte(rank).limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1893,7 +1893,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
                                     }
                                 }
                         }else{
-                            const meritList = await Merit.find().limit(50).exec();
+                            const meritList = await Merit.find().limit(10).exec();
 
                                 for(let x of meritList){
                                     const collegeData = await Institute.findOne({_id:x.college_id}).exec();
@@ -1907,6 +1907,15 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
             }
         }
     }
+    
+    var coachingData = []
+
+    for(let i in recommandations){
+        const coaching = await Institute.findOne({_id:recommandations[i].college_id})
+        if(coaching){
+            coachingData.push(coaching)
+        }
+    }
 
     if(!recommandations){
         res.status(204).send({
@@ -1916,7 +1925,21 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
     }else{
         res.status(200).send({
             success:true,
-            result:recommandations
+            result:{
+                merit:recommandations,
+                inst:coachingData
+            }
+        })
+    }
+})
+
+exports.dataForComparison = BigPromise(async (req, res, next) =>{
+    const {id} = req.params;
+
+    if(!id){
+        res.status(400).send({
+            success: false,
+            message:"No id is found"
         })
     }
 })

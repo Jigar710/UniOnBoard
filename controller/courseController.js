@@ -2,13 +2,26 @@ const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer')
 const cloudinary = require("cloudinary").v2;
+const { timeStamp } = require('console');
+const Razorpay = require('razorpay');
 
+const app = require('../app');
 const Section = require('../models/sectionModel');
 const Course = require('../models/courseModel');
 const LandingPageData = require('../models/landingPageModel');
 const User = require('../models/userModel')
 const BigPromise = require('../middleware/bigPromise');
+const Purchase = require('../models/paymentModel');
 
+
+const razorpayInstance = new Razorpay({
+
+	// Replace with your key_id
+	key_id: "rzp_test_HEniExhSJlPvuS",
+
+	// Replace with your key_secret
+	key_secret: "ktcNlnZRO7V9SDffENfrC859"
+});
 
 exports.addCourseBasic = BigPromise(async (req,res,next) => {
     const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption} = req.body;
@@ -432,6 +445,9 @@ exports.findAllSections = BigPromise(async(req,res,next)=>{
     var secNo = 1;
     var lecNo = 1;
     cnt=0
+    var secData = []
+    var lecData = []
+    var templec = []
     for(let i=0;i<resultData.length;i++){
         if(cnt === resultData.length && dataAll.length === resultData.length){
             break
@@ -444,13 +460,19 @@ exports.findAllSections = BigPromise(async(req,res,next)=>{
                 continue
             }
             if(resultData[k].SectionNo === secNo ){
+                if(secData.length !== secNo){
+                    secData.push(resultData[k].SectionName)
+                }
                 if(resultData[k].LectureNo == lecNo){
                     dataAll.push(resultData[k])
+                    templec.push(resultData[k].VideoName)
                     lecNo+=1
                     cnt+=1
                 }
             }
         }
+        lecData.push(templec)
+        templec = []
         secNo+=1
         lecNo=1
     }
@@ -458,7 +480,9 @@ exports.findAllSections = BigPromise(async(req,res,next)=>{
     res.status(200).send({
         success:true,
         result,
-        dataAll
+        dataAll,
+        secData,
+        lecData
     })
 })
 
@@ -510,3 +534,77 @@ exports.getAllLandingPageData = BigPromise(async(req, res, next) =>{
         }
     })
 })
+
+exports.createOrder = BigPromise(async (req, res, next) => {
+
+	// STEP 1:
+	const { amount, currency, notes } = req.body;
+    const receipt = req.user.id
+    const author = await User.findOne({_id:req.user.id});
+
+	// STEP 2:	
+	razorpayInstance.orders.create({ amount, currency, receipt, notes },
+		(err, order) => {
+
+			//STEP 3 & 4:
+			if (!err)
+				res.status(200).json({
+					success: true,
+					order : order,
+                    user:author
+				})
+
+			else
+				res.status(400).json({
+					success: true,
+					error : err
+				})
+				
+		}
+	)
+});
+
+exports.addPurchageData = BigPromise(async (req, res, next) =>{
+    const {id} = req.params;
+    const {razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature} = req.body;
+
+    if(!razorpay_order_id || !razorpay_payment_id || !razorpay_signature){
+        res.status(400).send({
+            success: false,
+            message:"Payment data is not valiable"
+        })
+    }
+
+    await Purchase.create({
+        UserId:req.user.id,
+        CourseId:id,
+        razorpay_order_id: razorpay_order_id,
+        razorpay_payment_id: razorpay_payment_id,
+        razorpay_signature: razorpay_signature
+    });
+
+    res.status(201).send({
+        success:true,
+    })
+})
+
+exports.getPurchases = BigPromise(async (req, res, next) =>{
+    const {id} = req.params;
+
+    const purchase = await Purchase.find().where('UserId').equals(req.user.id).where('CourseId').equals(id).exec();
+
+    console.log(purchase)
+    if(purchase.length >0){
+        res.status(201).send({
+            success:true,
+            purchase
+        })
+    }else{
+        res.status(404).send({
+            success:false
+        })
+    }
+})
+
