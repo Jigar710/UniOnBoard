@@ -6,9 +6,8 @@ const meritSchema = new mongoose.Schema({
         required: true
     },
     college_id:{
-        type:String,
-        required:true,
-        default: "NONE"
+        type:Object,
+        ref:'colleges'
     },
     institute:{
         type:String,

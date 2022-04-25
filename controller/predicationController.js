@@ -36,7 +36,86 @@ exports.calculateRank = BigPromise(async (req, res, next) =>{
     });
 });
 
-exports.collegeRecommander = bigPromise(async(req, res, next) =>{
+exports.getBranchList = BigPromise(async (req, res, next)=>{
+    const meritsData = await Merit.find();
+
+    if(!meritsData){
+        res.status(400).send({
+            success: false,
+            message: "No data in merit list"
+        })
+    }
+
+    var branchList = [] 
+    for(let i in meritsData){
+        if(!branchList.includes(meritsData[i].course)){
+            branchList.push(meritsData[i].course)
+        }
+    }
+
+    res.status(200).send({
+        success: true,
+        branches:branchList
+    })
+
+})
+
+exports.getCityList = BigPromise(async (req, res, next)=>{
+    const meritsData = await Merit.find();
+
+    if(!meritsData){
+        res.status(400).send({
+            success: false,
+            message: "No data in merit list"
+        })
+    }
+
+    var cityList = [] 
+
+    for(let i in meritsData){
+        if(!cityList.includes(meritsData[i].city)){
+            cityList.push(meritsData[i].city)
+        }
+    }
+
+    res.status(200).send({
+        success: true,
+        cities:cityList
+    })
+
+})
+
+exports.getCollegeList = BigPromise(async (req, res, next)=>{
+    const meritsData = await Merit.find();
+
+    if(!meritsData){
+        res.status(400).send({
+            success: false,
+            message: "No data in merit list"
+        })
+    }
+
+    var collegeNameList = [] 
+    const collegeData = await Institute.find();
+
+    for(let i of meritsData){
+        for (let j of collegeData){
+            if(i.college_id == j._id){
+                if(!collegeNameList.includes(j.name)){
+                    collegeNameList.push(j.name)
+                }
+            }
+        }
+    }
+
+    res.status(200).send({
+        success: true,
+        colleges:collegeNameList
+    })
+
+})
+
+exports.collegeRecommander = BigPromise(async(req, res, next) =>{
     const {rank, location, category, branch, collegePreference, maxFee} = req.body;
 
     var recommandations = [];
@@ -1913,7 +1992,18 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
     for(let i in recommandations){
         const coaching = await Institute.findOne({_id:recommandations[i].college_id})
         if(coaching){
-            coachingData.push(coaching)
+            coachingData.push({
+                CollegeName:coaching.name,
+                CollegeImg:coaching.images[0].secure_url,
+                CollegeLogo:coaching.logo[0].secure_url,
+                CollegeLocation:recommandations[i].city,
+                RecommandedBranch:recommandations[i].course,
+                CollegeFee:coaching.fees,
+                CollegeWebsite:coaching.website,
+                CollegeContact:coaching.contactNo,
+                ApprovedBy:coaching.approvedBy,
+                AcceptedExams:coaching.acceptedExam
+            })
         }
     }
 
@@ -1925,10 +2015,7 @@ exports.collegeRecommander = bigPromise(async(req, res, next) =>{
     }else{
         res.status(200).send({
             success:true,
-            result:{
-                merit:recommandations,
-                inst:coachingData
-            }
+            result:coachingData
         })
     }
 })
@@ -1942,4 +2029,8 @@ exports.dataForComparison = BigPromise(async (req, res, next) =>{
             message:"No id is found"
         })
     }
+
+    const instituteData = await Institute.findOne({_id:id});
+    const plcData = await Plca
+
 })
