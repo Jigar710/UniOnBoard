@@ -47,7 +47,6 @@ exports.addCourseBasic = BigPromise(async (req,res,next) => {
         })
     }
 
-    console.log(req.user)
     if(!req.user.id){
         return res.status(400).send({
             success:false,
@@ -595,7 +594,6 @@ exports.getPurchases = BigPromise(async (req, res, next) =>{
 
     const purchase = await Purchase.find().where('UserId').equals(req.user.id).where('CourseId').equals(id).exec();
 
-    console.log(purchase)
     if(purchase.length >0){
         res.status(201).send({
             success:true,
@@ -608,3 +606,459 @@ exports.getPurchases = BigPromise(async (req, res, next) =>{
     }
 })
 
+exports.getAllFacultyCourse = BigPromise ( async(req, res, next) =>{
+    const result = await Course.find({AuthorId:req.user.id});
+    const resultMore = await LandingPageData.find();
+
+    const allCourse = []
+    for(let x in result){
+        for (let y in resultMore){
+            if(result[x]._id == resultMore[y].CourseId){
+                const authorData = await User.find({_id:result[x].AuthorId})
+                const temp_data = {dataOne:result[x],dataTwo:resultMore[y],dataThree:authorData[0]}
+                allCourse.push(temp_data)
+            }
+        }
+    }
+
+    res.status(200).send({
+        success:true,
+        allCourse
+    })
+})
+
+exports.deleteFacultyCourse = BigPromise(async (req, res, next) =>{
+    const {id} = req.params;
+
+    await Course.findByIdAndDelete({_id:id});
+    await Section.deleteMany({CourseId:id});
+    await LandingPageData.deleteMany({CourseId:id})
+
+    res.status(400).send({
+        success:true,
+        message: "course deleted successfully"
+    })
+})
+
+exports.getPerticularCourse = BigPromise(async(req,res,next)=>{
+    const {id} = req.params
+    const result = await Course.findOne({_id:id});
+    const resultMore = await LandingPageData.findOne({CourseId:id});
+    
+    if(!result || !resultMore ){
+        res.status(400).send({
+            success:false,
+            message:"No data found"
+        })
+    }
+
+    var secData = [];
+
+    for(let i=0; i<result.Section.length;i++){
+        const temp = await Section.findOne({_id:result.Section[i]});
+        if(temp !== null){
+            secData.push(temp)
+        }
+        
+    }
+
+    if(!secData){
+        res.status(400).send({
+            success:false,
+            message:"No data found"
+        })
+    }
+
+    var secNo = 1;
+    var lecNo = 1;
+    cnt=0
+    var secDT = []
+    var lecData = []
+    var templec = []
+    for(let i=0;i<secData.length;i++){
+        if(cnt === secData.length){
+            break
+        }
+        for(let k=0;k<secData.length;k++){
+            if(cnt === secData.length){
+                break
+            }
+            if(secData[k] === undefined){
+                continue
+            }
+            if(secData[k].SectionNo === secNo ){
+                if(secDT.length !== secNo){
+                    secDT.push(secData[k].SectionName)
+                }
+                if(secData[k].LectureNo == lecNo){
+                    templec.push(secData[k].VideoName)
+                    lecNo+=1
+                    cnt+=1
+                }
+            }
+        }
+        lecData.push(templec.length)
+        templec = []
+        secNo+=1
+        lecNo=1
+    }
+
+    res.status(200).send({
+        success:true,
+        result,
+        resultMore,
+        secData,
+        secDT,
+        lecData
+    })
+})
+
+exports.updateCourseBasic= BigPromise(async (req,res,next) => {
+    const { CourseTitle,CourseLearning,CoursePrerequisite,CourseAudience,LectureCaption} = req.body;
+
+    if(!CourseTitle){
+        return res.status(400).send({
+            success:false,
+            message:"Course Title is required please make sure it's not empty"
+        })
+    }
+
+    if(!CourseLearning){
+        return res.status(400).send({
+            success:false,
+            message:"Course Learning is required please make sure it's not empty"
+        })
+    }
+
+    if(!CourseAudience){
+        return res.status(400).send({
+            success:false,
+            message:"Target audience for the course is required please make sure it's not empty"
+        })
+    }
+
+    if(!req.user.id){
+        return res.status(400).send({
+            success:false,
+            message:"Author Id is require please add"
+        })
+    }
+
+    const result = await Course.updateOne({
+        CourseTitle:CourseTitle,
+        CourseLearning: CourseLearning,
+        CoursePrerequisite:CoursePrerequisite,
+        CourseAudience:CourseAudience,
+        LectureCaption:LectureCaption,
+        AuthorId:req.user.id
+    })
+
+    res.status(201).send({
+        success:true,
+        result
+    })
+});
+
+exports.updateSectionContent = BigPromise (async (req, res, next)=>{
+    
+    const {CourseId,SectionNo,SectionName, LectureNo, ContentType, VideoName, LectureDesc} = req.body;
+    const LectureVideo = req.files.LectureVideo;
+    const LectureResourceFile = req.files.LectureResourceFile;
+
+    
+    if(!CourseId){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide Section origin"
+        })
+    }
+    
+    const course = await Course.findById({_id:CourseId})
+
+    if(!course){
+        res.status(400).send({
+            success:false,
+            message:"No such course is available"
+        })
+    }
+    
+
+    if(!SectionNo){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide section number"
+        })
+    }
+
+    if(!SectionName){
+        return res.status(400).send({
+            success:false,
+            message:"Please give name to the section"
+        })
+    }
+    if(!LectureNo){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide lecture number"
+        })
+    }
+
+    if(!ContentType){
+        return res.status(400).send({
+            success:false,
+            message:"Content type is missing"
+        })
+    }
+    if(!VideoName){
+        return res.status(400).send({
+            success:false,
+            message:"Provide name to the Lecture video inside section"
+        })
+    }
+
+    if(!LectureDesc){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide description of lecture"
+        })
+    }
+    
+    if(!LectureVideo){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide some content for lecture"
+        })
+    }
+
+    const resultVideo = await cloudinary.uploader.upload(LectureVideo.tempFilePath,{
+            resource_type: "video",
+            folder:"videos"
+        }
+    );
+    
+    var resultResource = {
+        id:"",
+        secure_url:""
+    };
+
+    if(LectureResourceFile){
+        
+        resultResource = await cloudinary.uploader.upload(LectureResourceFile.tempFilePath,{
+            folder:"resources",
+            resource_type:"raw",
+
+        })
+
+    }
+
+    var result = undefined;
+    var courseData = undefined;
+
+    const existingSection = await Section.findOne({CourseId:CourseId, SectionNo:SectionNo, LectureNo:LectureNo});
+
+    if(existingSection){
+        result = await Section.findByIdAndUpdate({_id:existingSection._id},{$set:
+            {
+                CourseId:CourseId,
+                SectionNo:SectionNo,
+                SectionName:SectionName,
+                LectureNo:LectureNo,
+                ContentType:ContentType,
+                VideoName:VideoName,
+                LectureDesc:LectureDesc,
+                LectureVideo:{
+                    id:resultVideo.public_id,
+                    secure_url:resultVideo.secure_url
+                },
+                LectureResourceFile:{
+                    id:resultResource.public_id,
+                    secure_url:resultResource.secure_url
+                }
+            }
+        }).exec();
+
+        res.status(201).send({
+            success:true,
+            result
+        })
+    }else{
+        res.status(201).send({
+            success:false,
+            message:"no such section found"
+        })
+    }
+
+    
+
+})
+
+exports.updateLandingPage = BigPromise(async (req,res,next)=>{
+    const {CourseId, 
+        CourseTitle,
+        CourseSubTitle,
+        CourseDesc,
+        CourseLanguage,
+        DifficultyLevel,
+        CourseCategory,
+        CourseLearing,
+        Pricing,
+        CouponCode,
+        WelcomeMessage,
+        CongoMessage,
+        Mode} = req.body;
+
+    const CourseImg = req.files.CourseImg;
+    const CoursePromo = req.files.CoursePromo;
+
+    if(!CourseId){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide Section origin"
+        })
+    }
+
+    const course = await Course.findById({_id:CourseId})
+
+    if(!course){
+        res.status(400).send({
+            success:false,
+            message:"No such course is available"
+        })
+    }
+    if(!CourseTitle){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide Course Title"
+        })
+    }
+
+    if(!CourseDesc){
+        return res.status(400).send({
+            success:false,
+            message:"Please write something about course"
+        })
+    }
+
+    if(!CourseLanguage){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide course language"
+        })
+    }
+
+    if(!DifficultyLevel){
+        return res.status(400).send({
+            success:false,
+            message:"Please select defficulty level of course"
+        })
+    }
+
+    if(!CourseCategory){
+        return res.status(400).send({
+            success:false,
+            message:"Please select course category"
+        })
+    }
+
+    if(!CourseLearing){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide details about course learning"
+        })
+    }
+
+    if(!CourseImg){
+        return res.status(400).send({
+            success:false,
+            message:"Please provide image for your course"
+        })
+    }
+
+    const resultImg = await cloudinary.uploader.upload(CourseImg.tempFilePath,{
+        folder:"courseimgs"
+    });
+
+    var resultPromo = {
+        id:"",
+        secure_url:""
+    };
+    if(CoursePromo){
+        resultPromo = await cloudinary.uploader.upload(CoursePromo.tempFilePath,{
+            resource_type: "video",
+            folder:"promos"
+        });
+    }
+
+
+    if(!Pricing){
+        return res.status(400).send({
+            success:false,
+            message:"Please choose price for your course"
+        })
+    }
+
+    if(!WelcomeMessage){
+        return res.status(400).send({
+            success:false,
+            message:"Please wite welcome message for your user"
+        })
+    }
+    
+    if(!CongoMessage){
+        return res.status(400).send({
+            success:false,
+            message:"Please write congretulations message for your user"
+        })
+    }
+
+    if(!Mode){
+        return res.status(400).send({
+            success:false,
+            message:"Please choose mode of course"
+        })
+    }
+
+    var result =undefined;
+    
+    const existingPage = await LandingPageData.findOne({CourseId:CourseId});
+
+    if(existingPage){
+        result = await LandingPageData.findByIdAndUpdate({_id:existingPage._id},{$set:
+            {
+                CourseId:CourseId, 
+                CourseTitle:CourseTitle,
+                CourseSubTitle:CourseSubTitle,
+                CourseDesc:CourseDesc,
+                CourseLanguage:CourseLanguage,
+                DifficultyLevel:DifficultyLevel,
+                CourseCategory:CourseCategory,
+                CourseLearing:CourseLearing,
+                CourseImg:{
+                    id:resultImg.public_id,
+                    secure_url:resultImg.secure_url
+                },
+                CoursePromo:{
+                    id:resultPromo.public_id,
+                    secure_url:resultPromo.secure_url
+                },
+                Pricing:Pricing,
+                CouponCode:CouponCode,
+                WelcomeMessage:WelcomeMessage,
+                CongoMessage:CongoMessage,
+                Mode:Mode
+            }
+        }).exec();
+        res.status(201).send({
+            success:true,
+            result
+        })
+    }else{
+        res.status(201).send({
+            success:false,
+            message:"no such page fond"
+        })
+    }
+
+
+
+})

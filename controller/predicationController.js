@@ -2021,6 +2021,7 @@ exports.collegeRecommander = BigPromise(async(req, res, next) =>{
     }
 })
 
+
 exports.dataForComparison = BigPromise(async (req, res, next) =>{
     const {id} = req.params;
 
@@ -2032,33 +2033,81 @@ exports.dataForComparison = BigPromise(async (req, res, next) =>{
     }
 
     const instituteData = await Institute.findOne({_id:id});
-    const plcData = await Placement.findOne({college_id:instituteData._id})
+    const plcData = await Placement.findOne({collegeId:id})
+    const meritData = await Merit.findOne({college_id:id})
 
-    if(!instituteData || !plcData){
-        res.status(400).send({
-            success: false,
-            message:"no data found"
+    if(meritData != undefined){
+        if(!instituteData || !plcData){
+            res.status(400).send({
+                success: false,
+                message:"no data found"
+            })
+        }
+    
+        res.status(200).send({
+            success:true,
+            result:{
+                collegeImg:instituteData.images[0],
+                collegeLogo:instituteData.logo[0],
+                collegeName:instituteData.name,
+                city:meritData.city,
+                fees:instituteData.fees,
+                approvedBy:instituteData.approvedBy,
+                acceptedExam:instituteData.acceptedExam,
+                branches:instituteData.branches,
+                website:instituteData.website,
+                plcRate:plcData.plcRate,
+                maxPkg:plcData.maxPkg,
+                minPkg:plcData.minPkg,
+                avgPkg:plcData.avgPkg,
+                majorRec:plcData.majorComp,
+                lastYearHired:plcData.lastYearNoOFStudents
+            }
+        })
+    }else{
+        if(!instituteData || !plcData){
+            res.status(400).send({
+                success: false,
+                message:"no data found"
+            })
+        }
+    
+        res.status(200).send({
+            success:true,
+            result:{
+                collegeImg:instituteData.images[0],
+                collegeLogo:instituteData.logo[0],
+                collegeName:instituteData.name,
+                city:instituteData.city,
+                fees:instituteData.fees,
+                approvedBy:instituteData.approvedBy,
+                acceptedExam:instituteData.acceptedExam,
+                branches:instituteData.branches,
+                website:instituteData.website,
+                plcRate:plcData.plcRate,
+                maxPkg:plcData.maxPkg,
+                minPkg:plcData.minPkg,
+                avgPkg:plcData.avgPkg,
+                majorRec:plcData.majorComp,
+                lastYearHired:plcData.lastYearNoOFStudents
+            }
         })
     }
 
-    res.status(200).send({
-        success:true,
-        result:{
-            collegeImg:instituteData.images[0],
-            collegeLogo:instituteData.logo[0],
-            collegeName:instituteData.name,
-            city:plcData.city,
-            fees:instituteData.fees,
-            approvedBy:instituteData.approvedBy,
-            acceptedExam:instituteData.acceptedExam,
-            branches:instituteData.branches,
-            website:instituteData.website,
-            plcRate:plcData.plcRate,
-            maxPkg:plcData.maxPkg,
-            minPkg:plcData.minPkg,
-            avgPkg:plcData.avgPkg,
-            majorRec:plcData.majorComp,
-            lastYearHired:plcData.lastYearNoOFStudents
-        }
-    })
+})
+
+exports.getAllPlcData = BigPromise(async (req, res, next)=>{
+    const plcData = await Placement.find();
+
+    if(plcData){
+        res.status(200).send({
+            success:true,
+            plcData:plcData
+        })
+    }else{
+        res.status(400).send({
+            success:false,
+            message:"No data found"
+        })
+    }
 })
